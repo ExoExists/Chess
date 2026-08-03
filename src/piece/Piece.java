@@ -52,4 +52,29 @@ public class Piece{
     public int getRow(int y){
         return (y + Board.HALF_SQUARE_SIZE)/Board.SQUARE_SIZE;
     }
+    
+    public void updatePosition(){
+        x = getX(col);
+        y = getY(row);
+
+        preCol = getCol(x);
+        preRow = getCol(y);
+    }
+
+    public boolean isWithinBoard(int targetCol, int targetRow){
+        if(targetCol >=0 && targetCol <=7 && targetRow >= 0 && targetRow <=7){
+            return true;
+        }
+        return false;
+    }
+    public boolean canMove(int targetCol, int targetRow){
+        return false;
+    }
+
+    public void resetPosition(){
+        col = preCol;
+        row = preRow;
+        x = getX(col);
+        y = getY(row);
+    }
 }

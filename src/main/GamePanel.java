@@ -34,6 +34,9 @@ public class GamePanel extends JPanel implements Runnable{
     public static final int BLACK = 1;
     int currentColor = WHITE;
 
+    //BOOLEANS
+    boolean canMove;
+    boolean validSquare;
 
     public GamePanel(){
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -89,9 +92,9 @@ public class GamePanel extends JPanel implements Runnable{
         pieces.add(new Bishop(WHITE, 2,7));
         pieces.add(new Bishop(WHITE, 5,7));
         pieces.add(new Queen(WHITE, 3,7));
-        pieces.add(new King(WHITE, 4,7));
+        pieces.add(new King(WHITE, 4,4));
 
-        // White team
+        // Black team
         pieces.add(new Pawn(BLACK, 0,1));
         pieces.add(new Pawn(BLACK, 1,1));
         pieces.add(new Pawn(BLACK, 2,1));
@@ -134,14 +137,37 @@ public class GamePanel extends JPanel implements Runnable{
             }
         }
 
+        //MOUSE BUTTON RELEASED//
+        if(mouse.pressed == false){
+            if(activeP != null){
+                if(validSquare){
+                activeP.updatePosition();
+                }
+                else{
+                    activeP.resetPosition();
+                activeP=null;
+                }
+            }
+        }
+
     }
 
     private void simulate(){
+
+        canMove=false;
+        validSquare=false;
         //If a piece is being held, update its position
         activeP.x = mouse.x - Board.HALF_SQUARE_SIZE;
         activeP.y = mouse.y - Board.HALF_SQUARE_SIZE;
         activeP.col = activeP.getCol(activeP.x);
         activeP.row = activeP.getCol(activeP.y);
+
+        //check if the piecei s hovering over a reachable square
+        if(activeP.canMove(activeP.col, activeP.row)){
+            canMove=true;
+            validSquare=true;
+
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -157,12 +183,14 @@ public class GamePanel extends JPanel implements Runnable{
             p.draw(graphics2d);
         }
         if(activeP != null){
-            graphics2d.setColor(Color.white);
-            graphics2d.setComposite((AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)));
-            graphics2d.fillRect(activeP.col * Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
-            graphics2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            if(canMove){
+                graphics2d.setColor(Color.white);
+                graphics2d.setComposite((AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)));
+                graphics2d.fillRect(activeP.col * Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+                graphics2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
             //draw the active piece in the end so it wont be hidden by the boardo r hte colored square
+            }
             activeP.draw(graphics2d);
 
         }
