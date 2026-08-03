@@ -1,5 +1,7 @@
 package main;
 import javax.swing.JPanel;
+
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -115,7 +117,31 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
     private void update(){
+        if(mouse.pressed){
+            //if the acrtive P i snull, check if you can pick up a piece
+            if(activeP==null){
+                for(Piece piece :simPieces){
+                    //if the mouse is on an ally piece, pick it up as the active piece
+                    if(piece.color == currentColor && piece.col== mouse.x/Board.SQUARE_SIZE && piece.row == mouse.y/Board.SQUARE_SIZE){
+                        activeP = piece;
+                    }
+                }
+                
+            }
+            else{
+                // IF the player is holding a piece, simulate hte phase
+                simulate();
+            }
+        }
 
+    }
+
+    private void simulate(){
+        //If a piece is being held, update its position
+        activeP.x = mouse.x - Board.HALF_SQUARE_SIZE;
+        activeP.y = mouse.y - Board.HALF_SQUARE_SIZE;
+        activeP.col = activeP.getCol(activeP.x);
+        activeP.row = activeP.getCol(activeP.y);
     }
 
     public void paintComponent(Graphics g) {
@@ -129,6 +155,16 @@ public class GamePanel extends JPanel implements Runnable{
         // PIECES
         for(Piece p : simPieces){
             p.draw(graphics2d);
+        }
+        if(activeP != null){
+            graphics2d.setColor(Color.white);
+            graphics2d.setComposite((AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)));
+            graphics2d.fillRect(activeP.col * Board.SQUARE_SIZE, activeP.row*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+            graphics2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+            //draw the active piece in the end so it wont be hidden by the boardo r hte colored square
+            activeP.draw(graphics2d);
+
         }
         
     }
