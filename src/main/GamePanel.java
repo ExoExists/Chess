@@ -87,12 +87,12 @@ public class GamePanel extends JPanel implements Runnable{
         pieces.add(new Pawn(WHITE, 7,6));
         pieces.add(new Knight(WHITE, 1,7));
         pieces.add(new Knight(WHITE, 6,7));
-        pieces.add(new Rook(WHITE, 0,7));
+        pieces.add(new Rook(WHITE, 0,3));
         pieces.add(new Rook(WHITE, 7,7));
         pieces.add(new Bishop(WHITE, 2,7));
         pieces.add(new Bishop(WHITE, 5,7));
         pieces.add(new Queen(WHITE, 3,7));
-        pieces.add(new King(WHITE, 4,4));
+        pieces.add(new King(WHITE, 4,7));
 
         // Black team
         pieces.add(new Pawn(BLACK, 0,1));
@@ -141,9 +141,14 @@ public class GamePanel extends JPanel implements Runnable{
         if(mouse.pressed == false){
             if(activeP != null){
                 if(validSquare){
-                activeP.updatePosition();
+
+                    //Move confirmed
+                    //Update hte pieces list in case a piece has been captuered and mreoved durign simulation
+                    copyPieces(simPieces, pieces);
+                    activeP.updatePosition();
                 }
                 else{
+                    copyPieces(pieces, simPieces);
                     activeP.resetPosition();
                 activeP=null;
                 }
@@ -156,6 +161,9 @@ public class GamePanel extends JPanel implements Runnable{
 
         canMove=false;
         validSquare=false;
+        //Reset the piece list in every loop
+        //This is basically for restoring the remvoed piece during the simulaiton
+        copyPieces(pieces, simPieces);
         //If a piece is being held, update its position
         activeP.x = mouse.x - Board.HALF_SQUARE_SIZE;
         activeP.y = mouse.y - Board.HALF_SQUARE_SIZE;
@@ -165,6 +173,12 @@ public class GamePanel extends JPanel implements Runnable{
         //check if the piecei s hovering over a reachable square
         if(activeP.canMove(activeP.col, activeP.row)){
             canMove=true;
+
+            //if hitting a piece, remove it form the list
+            if(activeP.hittingP !=null){
+                simPieces.remove(activeP.hittingP.getIndex());
+            }
+            
             validSquare=true;
 
         }
