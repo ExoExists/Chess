@@ -13,5 +13,34 @@ public class Pawn extends Piece{
             image = getImage("/res/pieces/b-pawn");
         }
     }
+    public boolean canMove(int targetCol, int targetRow){
+        if(isWithinBoard(targetCol, targetRow) && isSameSquare(targetCol, targetRow) == false){
+            int moveValue;
+            if(color == GamePanel.WHITE){
+                moveValue=-1;
+            }
+            else{
+                moveValue=1;
+            }
 
+            //Check the hitting piece
+            hittingP = getHittingP(targetCol, targetRow);
+            // 1 square movement
+            if(targetCol== preCol && targetRow == preRow + moveValue && hittingP == null){
+                return true;
+            }
+
+            //2 square movemment
+            if(targetCol == preCol && targetRow == preRow + moveValue*2 && hittingP == null && moved == false && pieceIsOnStraightLine(targetCol, targetRow) == false){
+                return true;
+            }
+
+            //Diagonal movement & Capture 9if a piece is on a square diagonally in front of it)
+            if(Math.abs(targetCol - preCol) == 1 && targetRow == preRow + moveValue && hittingP != null && hittingP.col != color){
+                return true;
+            }
+        }
+        return false;
+    }
 }
+

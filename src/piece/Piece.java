@@ -14,6 +14,7 @@ public class Piece{
     public int col, row, preCol, preRow;
     public int color;
     public Piece hittingP;
+    public boolean moved;
     public Piece(int color, int col, int row){
         this.color=color;
         this.col=col;
@@ -67,6 +68,7 @@ public class Piece{
 
         preCol = getCol(x);
         preRow = getCol(y);
+        moved = true;
     }
     public boolean isSameSquare(int targetCol, int targetRow){
         if(targetCol==preCol & targetRow == preRow){
