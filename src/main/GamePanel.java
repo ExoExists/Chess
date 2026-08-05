@@ -4,8 +4,10 @@ import javax.swing.JPanel;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 
 import piece.Pawn;
@@ -146,6 +148,8 @@ public class GamePanel extends JPanel implements Runnable{
                     //Update hte pieces list in case a piece has been captuered and mreoved durign simulation
                     copyPieces(simPieces, pieces);
                     activeP.updatePosition();
+                    
+                    changePlayer();
                 }
                 else{
                     copyPieces(pieces, simPieces);
@@ -206,8 +210,26 @@ public class GamePanel extends JPanel implements Runnable{
             //draw the active piece in the end so it wont be hidden by the boardo r hte colored square
             }
             activeP.draw(graphics2d);
+            //status messages
+            graphics2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+            graphics2d.setFont(new Font("Book Antiqua", Font.PLAIN, 40));
+            graphics2d.setColor(Color.white);
 
+            if(currentColor == WHITE){
+                graphics2d.drawString("White's turn", 840, 550);
+            } else{
+                graphics2d.drawString("Black's turn", 840, 250);
+            }
         }
         
+    }
+    private void changePlayer(){
+        if(currentColor == WHITE){
+            currentColor = BLACK;
+        }
+        else{
+            currentColor = WHITE;
+        }
+        activeP = null;
     }
 }
