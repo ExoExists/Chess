@@ -18,7 +18,7 @@ public class Knight extends Piece{
         if(isWithinBoard(targetCol, targetRow)){
             //knight can move if its movement ratio of ocl and row is 1:2 or 2:1
             if(Math.abs(targetCol - preCol) * Math.abs(targetRow - preRow)==2){
-                if(isValidSquare(targetCol, targetRow)){
+                if(isValidSquare(targetCol, targetRow) && pieceIsOnDiagonalLine(targetCol, targetRow) == false){
                     return true;
                 }
             }

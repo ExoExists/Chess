@@ -152,4 +152,56 @@ public class Piece{
         return false;
         }
     }
+    public boolean pieceIsOnDiagonalLine(int targetCol, int targetRow){
+        if(targetRow < preRow){
+            //Up Left   
+            for(int c = preCol-1; c > targetCol; c--){
+                int diff = Math.abs(c - preCol);
+                for(Piece piece : GamePanel.simPieces){
+                    if(piece.col == c && piece.row == preRow - diff){
+                        hittingP = piece;
+                        return true;
+                    }
+                }
+            }
+            //Up Right
+            for(int c = preCol+1; c < targetCol; c++){
+                int diff = Math.abs(c - preCol);
+                for(Piece piece : GamePanel.simPieces){
+                    if(piece.col == c && piece.row == preRow - diff){
+                        hittingP = piece;
+                        return true;
+                    }
+                }
+            }
+
+        }
+        if(targetRow> preRow){
+            //Down Left
+            for(int c = preCol-1; c > targetCol; c--){
+                int diff = Math.abs(c - preCol);
+                for(Piece piece : GamePanel.simPieces){
+                    if(piece.col == c && piece.row == preRow + diff){
+                        hittingP = piece;
+                        return true;
+                    }
+                }
+            }
+            //Down Right
+                for(int c = preCol+1; c < targetCol; c++){
+                int diff = Math.abs(c - preCol);
+                for(Piece piece : GamePanel.simPieces){
+                    if(piece.col == c && piece.row == preRow + diff){
+                        hittingP = piece;
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        
+
+
+        return false;
+    }
 }
